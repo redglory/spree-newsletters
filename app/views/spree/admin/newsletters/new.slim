@@ -1,0 +1,8 @@
+= render "spree/shared/error_messages", :target => @newsletter
+
+= form_for(@newsletter, :url => collection_url, :html => { :multipart => true }) do |f|
+  .well
+    fieldset#general_fields
+      legend = Spree.t(:newsletter)
+      = render :partial => "form", :locals => { :f => f }
+      = render :partial => "spree/admin/shared/new_resource_links"

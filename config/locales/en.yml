@@ -1,14 +1,30 @@
 en:
-  newsletters: Newsletters
-  newsletter: Newsletter
-  new_newsletter: New Newsletter
-  editing_newsletter: Editing Newsletter
-  
-  newsletter_sent: Newsletter Sent
-  newsletter_subject: Newsletter Subject
-  newsletter_clicks: Newsletter Clicks
-  
-  add_newsletter_module: Add Newsletter Module
-  
-  add_heading: Add Heading
-  add_ruler: Add Ruler
+  spree:
+    newsletters: Newsletters
+    newsletter: Newsletter
+    new_newsletter: New Newsletter
+    new_newsletter_copy: New Newsletter Copy
+    new_newsletter_recipient: New Newsletter Recipient
+    editing_newsletter: Editing Newsletter
+    editing_newsletter_recipient: Editing Newsletter Recipient
+    edit_newsletter_copy: Edit Newsletter Copy
+    newsletter_sent: Newsletter Sent
+    newsletter_subject: Newsletter Subject
+    newsletter_clicks: Newsletter Clicks
+    newsletter_preview: Preview Newsletter
+    newsletter_recipients: Newsletter Recipients
+    add_newsletter_module: Add Newsletter Module
+    add_heading: Add Heading
+    add_image: Add Image
+    add_ruler: Add Ruler
+    add_copy: Add Copy
+    copy: Copy
+    save: Save
+    select_files: Select Files
+    general: General
+    send_test: "Send Test"
+    send_email: "Send E-mail"
+    action: Action
+    unsubscribe_msg: To Unsubscribe simply reply to this email with the word UNSUBSCRIBE.
+    trash: TRASH
+    multiple_selection: Select multiple entries by using <CTRL> key

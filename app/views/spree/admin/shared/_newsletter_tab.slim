@@ -1,0 +1,3 @@
+- if can? :admin, Spree::Newsletter
+  ul.nav.nav-sidebar
+    = main_menu_tree Spree.t(:newsletters), icon: "envelope", sub_menu: "newsletter", url: "#sidebar-newsletters"

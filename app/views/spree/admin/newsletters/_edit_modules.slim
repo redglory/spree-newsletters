@@ -1,0 +1,13 @@
+fieldset#email_preview
+  legend = Spree.t(:newsletter_preview)
+  .row
+    .col-sm-8
+      .embed-responsive.embed-responsive-4by3
+        iframe.embed-responsive-item id='newsletter-preview', src=spree.newsletter_path(@newsletter.id)
+    .col-sm-4
+      .module_order_out
+        = render :partial => "module_list"
+        #trash = Spree.t(:trash)
+
+#remote-dialog
+  | &nbsp;        

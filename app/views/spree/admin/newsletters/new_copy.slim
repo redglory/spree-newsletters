@@ -1,0 +1,4 @@
+h1 = Spree.t(:new_newsletter_copy)
+
+= form_for(@newsletter_copy, :url => spree.admin_newsletter_create_copy_path, :html => { :multipart => true }, :remote => true) do |f|
+  = render :partial => "copy_form", :locals => { :f => f }

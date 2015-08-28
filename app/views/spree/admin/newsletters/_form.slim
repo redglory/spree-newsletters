@@ -1,0 +1,6 @@
+.row
+  .col-md-6 data-hook="admin_newsletter_form_fields"
+    div data-hook="newsletters"
+      .form-group data-hook="subject"
+        = f.label :subject
+        = f.text_field :subject, :class => 'form-control'

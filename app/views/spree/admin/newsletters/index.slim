@@ -1,0 +1,29 @@
+- content_for :page_title
+  = plural_resource_name(Spree::Newsletter)
+
+- content_for :page_actions
+  = button_link_to(Spree.t(:new_newsletter), new_object_url, :class => "btn-success", :icon => 'add', :id => 'admin_new_newsletter_link') 
+
+- if @newsletters.any?
+  table.table
+    thead
+      tr
+        th = Spree.t(:newsletter_sent)
+        th = Spree.t(:newsletter_subject)
+        th = Spree.t(:newsletter_clicks)
+        th = Spree.t(:action)
+    tbody
+      - for newsletter in @newsletters
+        tr id=dom_id(newsletter)
+          td = newsletter.email_sent.nil? ? '' : icon('tick')
+          td = newsletter.subject
+          td = newsletter.email_click
+          td
+            = link_to_edit newsletter
+            = link_to_delete newsletter
+- else
+  .alert.alert-info.no-objects-found
+    = Spree.t(:no_resource_found, resource: plural_resource_name(Spree::Newsletter))
+    |,  
+    = link_to(Spree.t(:add_one), new_object_url) if can? :create, Spree::Newsletter
+    |!

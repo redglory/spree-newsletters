@@ -1,0 +1,30 @@
+pt:
+  spree:
+    newsletters: Newsletters
+    newsletter: Newsletter
+    new_newsletter: Nova Newsletter
+    new_newsletter_copy: Nova Cópia de Newsletter
+    new_newsletter_recipient: Novo Receptor de Newsletter
+    editing_newsletter: Editar Newsletter
+    editing_newsletter_recipient: Editar Receptor da Newsletter
+    edit_newsletter_copy: Editar Cópia de Newsletter
+    newsletter_sent: Newsletter Enviada
+    newsletter_subject: Assunto da Newsletter 
+    newsletter_clicks: Cliques na Newsletter
+    newsletter_preview: Pré-visualizar Newsletter
+    newsletter_recipients: Receptores da Newsletter
+    add_newsletter_module: Adicionar Módulo à Newsletter
+    add_heading: Adicionar Cabeçalho
+    add_image: Adicionar Imagem
+    add_ruler: Adicionar Régua
+    add_copy: Adicionar Cópia
+    copy: Cópia
+    save: Guardar
+    select_files: Seleccionar Ficheiros
+    general: Geral
+    send_test: "Enviar Teste"
+    send_email: "Enviar E-mail"
+    action: Acção
+    unsubscribe_msg: Para cancelar a subscrição à newsletter responda a este e-mail com a palavra UNSUBSCRIBE.
+    trash: Apagar
+    multiple_selection: Para seleccionar mais de uma entrada use a tecla <CTRL>

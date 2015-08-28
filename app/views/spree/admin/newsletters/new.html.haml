@@ -1,5 +1,0 @@
-%h1=t :new_newsletter
-
-= form_for(@newsletter, :url => collection_url, :html => { :multipart => true }) do |f|
-  = render :partial => "form", :locals => { :f => f }
-  = render :partial => "spree/admin/shared/new_resource_links"

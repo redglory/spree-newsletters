@@ -1,6 +1,6 @@
 Spree::Core::Engine.routes.draw do
 
-  match 'newsletters/:id' => 'newsletters#show', :as => 'newsletter'
+  get 'newsletters/:id' => 'newsletters#show', :as => 'newsletter'
   namespace :admin do
     resources :newsletters do
       post :add_module, :on => :collection

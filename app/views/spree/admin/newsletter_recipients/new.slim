@@ -1,0 +1,5 @@
+h1 = Spree.t(:new_newsletter_recipient)
+
+= form_for(:newsletter_recipient, :url => collection_url) do |f|
+  = render :partial => "form", :locals => { :f => f }
+  = render :partial => "spree/admin/shared/new_resource_links"

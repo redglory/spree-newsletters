@@ -1,0 +1,26 @@
+= render "spree/shared/error_messages", :target => @newsletter
+= render :partial => "spree/admin/shared/newsletter_options"
+
+= form_for(@newsletter, :url => object_url, :html => { :method => :put }) do |f|
+  .well
+    fieldset#general_fields
+      legend = Spree.t(:newsletter)
+      = render :partial => "form", :locals => { :f => f }
+      = render "spree/admin/shared/edit_resource_links"
+  .well
+    = render :partial => "edit_modules"
+    = button_link_to Spree.t(:send_test), spree.admin_newsletter_send_test_path(:newsletter_id => @newsletter.id), class: 'btn-default', icon: 'envelope', :remote => true
+
+= form_for(:newsletter, :url => spree.admin_newsletter_send_email_path(:newsletter_id => @newsletter.id)) do |f| #, :remote => true
+  .well
+    .form-group
+      = label :state_ids, Spree.t(:states)
+      = collection_select nil, :state_ids, Spree::State.all, :id, :name, {}, { :multiple => true, :style => 'height: 300px; width: 240px;', :class => 'form-control' }
+      sub = Spree.t(:multiple_selection)
+    = content_tag :button, type: 'submit', class: 'btn btn-success'
+      i.icon.icon-envelope.icon-large
+      =< Spree.t(:send_email)
+
+- key = Rails.application.config.session_options[:key]
+javascript:
+  var newsletter_id = "#{@newsletter.id}", app_key = '#{key}', app_cookie = '#{cookies[key]}';

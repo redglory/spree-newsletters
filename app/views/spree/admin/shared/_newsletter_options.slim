@@ -1,0 +1,39 @@
+- content_for :page_title
+  => link_to Spree.t(:newsletters), spree.admin_newsletters_path
+  | /
+  =< @newsletter.subject
+
+- content_for :sidebar
+  h3 = Spree.t(:add_newsletter_module)
+  
+  .form-group
+    = button_link_to Spree.t(:add_ruler), '#', class: 'btn-default', id: 'add_ruler', icon: 'add'
+  .form-group
+    = button_link_to Spree.t(:add_copy), '#', class: 'btn-info', id: 'add_copy', icon: 'add'
+  
+  hr
+  h4 = Spree.t(:add_heading)
+  .form-inline
+    .form-group
+      = text_field_tag :add_header_value, nil, class: 'form-control'
+      = button_link_to Spree.t(:add), '#', class: 'btn-success', id: 'add_header', icon: 'add'
+  
+  hr    
+  h4 = Spree.t(:add_product)
+  .form-inline
+    .form-group
+      = text_field_tag :add_product_value, nil, class: 'form-control'
+      = hidden_field_tag :add_product_id
+      = button_link_to Spree.t(:add), '#', class: 'btn-primary', id: 'add_product', icon: 'add'
+  
+  hr  
+  h4 = Spree.t(:add_image)
+  .form-group
+    = label :image_name, "Nome da Imagem"
+    = text_field_tag :image_name, nil, class: 'form-control'
+  .form-group
+    = label :image_href, "URL da Imagem"
+    = text_field_tag :image_href, nil, class: 'form-control'
+  .form-group
+    = link_to Spree.t(:select_files), '#', :id => 'select_image'
+  = button_link_to Spree.t(:add_image), '#', class: 'btn-primary', id: 'add_image', icon: 'add'
