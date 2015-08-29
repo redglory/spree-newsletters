@@ -79,7 +79,7 @@ $(document).ready(function(){
   $('#select_image').uploadify({
     'swf'               : '/assets/uploadify/uploadify.swf',
     'uploader'          : '/admin/newsletters/'+newsletter_id+'/add_image',
-    'cancelImg'         : '/assets/uploadify/cancel.png',
+    'cancelImg'         : '/assets/uploadify/uploadify-cancel.png',
     'method'            : 'post',
     'removeCompleted'   : true,
     'multi'             : true,
@@ -96,8 +96,8 @@ $(document).ready(function(){
   });
 
   $("#add_image").click(function(e){
-	uploadify_script_data['[image][name]'] = $("#image_name").val();
-	uploadify_script_data['[image][href]'] = $("#image_href").val();
+	  uploadify_script_data['[image][name]'] = $("#image_name").val();
+	  uploadify_script_data['[image][href]'] = $("#image_href").val();
     $('#select_image').uploadify('settings','formData', uploadify_script_data);
     //$('#select_image').uploadifySettings('scriptData', uploadify_script_data);
     $('#select_image').uploadify('upload');
