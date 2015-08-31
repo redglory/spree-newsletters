@@ -77,9 +77,9 @@ $(document).ready(function(){
   });
 
   $('#select_image').uploadify({
-    'swf'               : '/assets/uploadify/uploadify.swf',
+    'swf'               : '/assets/jquery-uploadify/uploadify.swf',
     'uploader'          : '/admin/newsletters/'+newsletter_id+'/add_image',
-    'cancelImg'         : '/assets/uploadify/uploadify-cancel.png',
+    'cancelImg'         : '/assets/jquery-uploadify/uploadify-cancel.png',
     'method'            : 'post',
     'removeCompleted'   : true,
     'multi'             : true,

@@ -3,13 +3,13 @@ module Spree
     class NewslettersController < ResourceController
 
       def add_module
-        params['module']['position'] = 100
-        NewsletterLine.create(params['module'])
+        params[:module][:position] = 100
+        NewsletterLine.create(newsletter_line_params)
         module_list
       end
 
       def remove_module
-        NewsletterLine.delete(params['module'])
+        NewsletterLine.delete(newsletter_line_params)
         module_list
       end
 
@@ -48,7 +48,7 @@ module Spree
       end
 
       def create_copy
-        copy = NewsletterCopy.new(params[:newsletter_copy])
+        copy = NewsletterCopy.new(newsletter_copy_params)
         copy.newsletter_id = params[:newsletter_id]
         copy.save
 
@@ -62,7 +62,7 @@ module Spree
       end
 
       def update_copy
-        NewsletterCopy.find(params[:newsletter_copy_id]).update_attributes(params[:newsletter_copy])
+        NewsletterCopy.find(params[:newsletter_copy_id]).update_attributes(newsletter_copy_params)
         module_list
       end
 
@@ -94,5 +94,13 @@ module Spree
       respond_override :destroy => { :js => { :success => lambda { render_js_for_destroy } } }
     end
 
+    private
+      def newsletter_line_params
+        params.require(:module).permit(:newsletter_id, :module_name, :module_value, :permalink, :email_sent, :email_view, :email_click, :position)
+      end
+      
+      def newsletter_copy_params
+        params.require(:newsletter_copy).permit(:newsletter_id, :title, :body, :show_title, :small_text)
+      end
   end
 end
