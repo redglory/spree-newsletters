@@ -2,9 +2,16 @@ module Spree
   module Admin
     class NewslettersController < ResourceController
 
+      def show
+        @newsletter = Newsletter.find(params[:newsletter_id])
+      end
+
       def add_module
-        params[:module][:position] = 100
-        NewsletterLine.create(newsletter_line_params)
+        @newsletter_line = Spree::NewsletterLine.new(newsletter_line_params)
+        @newsletter_line[:position] = 100
+        #params[:module][:position] = 100
+        #NewsletterLine.create(newsletter_line_params)
+        @newsletter_line.save
         module_list
       end
 
@@ -14,13 +21,13 @@ module Spree
       end
 
       def module_list
-        @newsletter = Newsletter.find(params['newsletter_id'])
+        @newsletter = Newsletter.find(params[:newsletter_id])
         render :partial => 'spree/admin/newsletters/module_list', :layout => false
       end
 
       def sort
         #puts params['module']
-        NewsletterLine.where(:newsletter_id => params['newsletter_id']).all.each do |nl|
+        NewsletterLine.where(:newsletter_id => params[:newsletter_id]).all.each do |nl|
           nl.position = params['module'].index(nl.id.to_s)
           nl.save
         end
@@ -43,7 +50,7 @@ module Spree
       end
 
       def new_copy
-        @newsletter_copy = NewsletterCopy.new
+        @newsletter_copy = NewsletterCopy.new newsletter_copy_params
         render 'new_copy', :layout => false
       end
 
@@ -92,15 +99,15 @@ module Spree
       respond_override :update => { :html => { :success => lambda { redirect_to collection_url } } }
       respond_override :create => { :html => { :success => lambda { redirect_to collection_url } } }
       respond_override :destroy => { :js => { :success => lambda { render_js_for_destroy } } }
-    end
 
-    private
-      def newsletter_line_params
-        params.require(:module).permit(:newsletter_id, :module_name, :module_value, :permalink, :email_sent, :email_view, :email_click, :position)
-      end
-      
-      def newsletter_copy_params
-        params.require(:newsletter_copy).permit(:newsletter_id, :title, :body, :show_title, :small_text)
-      end
+      private
+        def newsletter_line_params
+          params.require(:module).permit(:newsletter_id, :module_name, :module_value, :permalink, :email_sent, :email_view, :email_click, :position)
+        end
+        
+        def newsletter_copy_params
+          params.require(:newsletter_copy).permit(:newsletter_id, :title, :body, :show_title, :small_text)
+        end
+    end
   end
 end
