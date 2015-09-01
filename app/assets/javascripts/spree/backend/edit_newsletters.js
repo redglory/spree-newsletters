@@ -1,4 +1,9 @@
-$.fn.newsletter_product_autocomplete = function(){
+$.fn.newsletter_product_autocomplete = function (options) {
+  'use strict';
+  // Default options
+  options = options || {};
+  var multiple = typeof(options.multiple) !== 'undefined' ? options.multiple : true;
+
   return this.each(function() {
     $(this).autocomplete({
       source: function(request, response) {
@@ -60,7 +65,8 @@ $(document).ready(function(){
   uploadify_script_data[csrf_param] = encodeURIComponent(csrf_token);
   uploadify_script_data[app_key] = encodeURIComponent(app_cookie);
   
-  $("#add_product_value").newsletter_product_autocomplete();
+  //$("#add_product_value").newsletter_product_autocomplete();
+  $("#add_product_value").productAutocomplete();
   
   $("#trash").droppable({
     accept: "#module_list > li",
@@ -68,7 +74,14 @@ $(document).ready(function(){
     drop: function( event, ui ) {
       if (!confirm('Are you sure you would like to remove this module?')) return false;
       ui.draggable.remove();
-      jQuery.post( '/admin/newsletters/remove_module?newsletter_id='+newsletter_id, ui.draggable.attr('id').replace('_', '='),function(data, status, xhr){
+      var moduleData = {
+          'module': {
+            'newsletter_id': newsletter_id,
+            'module_id': ui.draggable.attr("id").split("_").pop()
+          }
+      };
+
+      jQuery.post( '/admin/newsletters/remove_module', moduleData, function(data, status, xhr){
         preview_newsletter();
         $('#module_list').replaceWith(data);
         init_module_list();
@@ -95,7 +108,7 @@ $(document).ready(function(){
     }
   });
 
-  $("#add_image").click(function(e){
+  $("#add_image").on("click", function(e){
 	  uploadify_script_data['[image][name]'] = $("#image_name").val();
 	  uploadify_script_data['[image][href]'] = $("#image_href").val();
     $('#select_image').uploadify('settings','formData', uploadify_script_data);
@@ -104,7 +117,7 @@ $(document).ready(function(){
     e.preventDefault();
   });
   
-  $("#add_copy").click(function(e){
+  $("#add_copy").on("click", function(e){
     
     $.ajax({
       url: '/admin/newsletters/'+newsletter_id+'/new_copy',
@@ -122,17 +135,17 @@ $(document).ready(function(){
     
   });
   
-  $("#add_ruler").click(function(e){
+  $("#add_ruler").on("click", function(e){
     add_module('hr');
     e.preventDefault();
   });
   
-  $("#add_header").click(function(e){
+  $("#add_header").on("click", function(e){
     add_module('h2', $("#add_header_value").val());
     e.preventDefault();
   });
   
-  $("#add_product").click(function(e){
+  $("#add_product").on("click", function(e){
     add_module('product', $("#add_product_value").val(), $("#add_product_id").val());
     e.preventDefault();
   });
@@ -149,13 +162,22 @@ $(document).ready(function(){
 
 function add_module(name, value, id)
 {
-  posts = 'module[newsletter_id]='+newsletter_id+'&module[module_name]='+name;
-  if(value != undefined)
-    posts = posts+'&module[module_value]='+encodeURI(value);
-  if(id != undefined)
-    posts = posts+'&module[module_id]='+id;
-    
-  jQuery.post( '/admin/newsletters/add_module?newsletter_id='+newsletter_id, posts,function(data, status, xhr){
+  var moduleData = {
+      'module': {
+        'newsletter_id': newsletter_id,
+        'module_name': name
+      }
+  };
+  //posts = 'module[newsletter_id]='+newsletter_id+'&module[module_name]='+name;
+  if(value != undefined) {
+    moduleData['module']['module_value'] = encodeURI(value);
+    //posts = posts+'&module[module_value]='+encodeURI(value);
+  }
+  if(id != undefined) {
+    moduleData['module']['module_id'] = id;
+    //posts = posts+'&module[module_id]='+id;
+  }
+  jQuery.post( '/admin/newsletters/add_module', moduleData, function(data, status, xhr){
     preview_newsletter();
     $('#module_list').replaceWith(data);
     init_module_list();
@@ -171,7 +193,13 @@ function init_module_list()
 {
   $('#module_list').sortable({
     update: function(){
-      jQuery.post( '/admin/newsletters/sort?newsletter_id='+newsletter_id, $('#module_list').sortable('serialize'),function(){
+      var moduleSort = {
+          'module': {
+            'newsletter_id': newsletter_id,
+            'sort': $('#module_list').sortable('serialize')
+          }
+      };      
+      jQuery.post( '/admin/newsletters/sort', moduleSort, function(){
         preview_newsletter();
       });
      }

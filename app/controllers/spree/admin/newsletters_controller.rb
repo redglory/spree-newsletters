@@ -16,22 +16,27 @@ module Spree
       end
 
       def remove_module
-        NewsletterLine.delete(newsletter_line_params)
-        module_list
+        unless params[:module].nil?
+          @newsletter_line = NewsletterLine.where(newsletter_id: params[:module][:newsletter_id], id: params[:module][:module_id]).first
+          if @newsletter_line && @newsletter_line.delete
+            module_list
+          else
+            flash[:error] = "There was a problem removing module!"
+          end
+        end
       end
 
       def module_list
-        @newsletter = Newsletter.find(params[:newsletter_id])
+        @newsletter = Newsletter.find(params[:module][:newsletter_id].to_i)
         render :partial => 'spree/admin/newsletters/module_list', :layout => false
       end
 
       def sort
         #puts params['module']
-        NewsletterLine.where(:newsletter_id => params[:newsletter_id]).all.each do |nl|
-          nl.position = params['module'].index(nl.id.to_s)
+        NewsletterLine.where(:newsletter_id => params[:module][:newsletter_id]).all.each do |nl|
+          nl.position = params['module']['sort'].index(nl.id.to_s)
           nl.save
         end
-
         render :nothing => true
       end
 
@@ -90,6 +95,7 @@ module Spree
       end
 
       def file_upload_params
+        binding.pry
         h = Hash.new
         h = params[:Filedata]
         h.content_type = MIME::Types.type_for(h.original_filename).first.content_type
@@ -102,11 +108,12 @@ module Spree
 
       private
         def newsletter_line_params
-          params.require(:module).permit(:newsletter_id, :module_name, :module_value, :permalink, :email_sent, :email_view, :email_click, :position)
+          params.require(:module).permit(:newsletter_id, :module_id, :module_name, :module_value, :permalink, :email_sent, :email_view, :email_click, :position, :sort)
         end
         
         def newsletter_copy_params
-          params.require(:newsletter_copy).permit(:newsletter_id, :title, :body, :show_title, :small_text)
+          params.permit(:newsletter_id, :title, :body, :show_title, :small_text)
+          #require(:newsletter_copy).
         end
     end
   end
