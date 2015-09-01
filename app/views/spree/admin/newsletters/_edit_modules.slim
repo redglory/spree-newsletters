@@ -5,12 +5,12 @@ fieldset#email_preview
       .embed-responsive.embed-responsive-4by3
         iframe.embed-responsive-item id='newsletter-preview', src=spree.newsletter_path(@newsletter.id)
     .col-sm-3
-      .module_order_out
-        = render :partial => "module_list"
-        #trash  
-          .lid
-          .lidcap
-          .bin
+      //.module_order_out
+      = render :partial => "module_list"
+      #trash  
+        .lid
+        .lidcap
+        .bin
 
 #remote-dialog
   | &nbsp;        

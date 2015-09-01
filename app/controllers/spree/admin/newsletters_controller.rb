@@ -9,8 +9,6 @@ module Spree
       def add_module
         @newsletter_line = Spree::NewsletterLine.new(newsletter_line_params)
         @newsletter_line[:position] = 100
-        #params[:module][:position] = 100
-        #NewsletterLine.create(newsletter_line_params)
         @newsletter_line.save
         module_list
       end
