@@ -28,3 +28,5 @@ en:
     unsubscribe_msg: To Unsubscribe simply reply to this email with the word UNSUBSCRIBE.
     trash: TRASH
     multiple_selection: Select multiple entries by using <CTRL> key
+    small_text: Small Text
+    show_title: Show Title

@@ -20,10 +20,14 @@
   
   hr    
   h4 = Spree.t(:add_product)
-  .form-inline
-    .form-group
-      = text_field_tag :add_product_value, nil, class: 'form-control'
-      = hidden_field_tag :add_product_id
+  //.form-inline
+    //.form-group
+      //= text_field_tag :add_product_value, nil, class: 'form-control'
+  div(style="overflow:auto;width:100%;")
+    div(style="width:325px;")
+    = hidden_field_tag :add_product_id
+    = hidden_field_tag :add_product_value, nil, :class => "product_picker"
+    div(style="display:inline-block;width:125px;")
       = button_link_to Spree.t(:add), '#', class: 'btn-primary', id: 'add_product', icon: 'add'
   
   hr  

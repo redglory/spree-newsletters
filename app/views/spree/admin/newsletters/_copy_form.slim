@@ -1,16 +1,15 @@
-p
-  = f.label :title
-  = f.text_field :title
-p
-  br
-  = f.label :body
-  br
-  = f.text_area :body
-p
-  = f.label :show_title
-  = f.check_box :show_title
-  br
-  = f.label :small_text
-  = f.check_box :small_text
-p
-  = f.submit Spree.t(:save)
+.row
+  .col-md-6 data-hook="admin_newsletter_copy_form_fields"
+    div data-hook="newsletter_copy"
+      .form-group
+        = f.label :title
+        = f.text_field :title, :class => 'form-control'
+      .form-group
+        = f.label :body
+        = f.text_area :body, :class => 'form-control'
+      = f.label :show_title
+        = f.check_box :show_title
+        = Spree.t(:show_title)
+      = f.label :small_text
+        = f.check_box :small_text
+        = Spree.t(:small_text)

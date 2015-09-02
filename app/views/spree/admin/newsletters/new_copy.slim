@@ -1,4 +1,8 @@
-h1 = Spree.t(:new_newsletter_copy)
+= render "spree/shared/error_messages", :target => @newsletter_copy
 
 = form_for(@newsletter_copy, :url => spree.admin_newsletter_create_copy_path, :html => { :multipart => true }, :remote => true) do |f|
-  = render :partial => "copy_form", :locals => { :f => f }
+  .well
+    fieldset#newsletter_copy
+      legend = Spree.t(:new_newsletter_copy)
+      = render :partial => "copy_form", :locals => { :f => f }
+      = render :partial => "spree/admin/shared/new_resource_links"

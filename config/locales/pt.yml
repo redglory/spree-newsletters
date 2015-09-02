@@ -28,3 +28,5 @@ pt:
     unsubscribe_msg: Para cancelar a subscrição à newsletter responda a este e-mail com a palavra UNSUBSCRIBE.
     trash: Apagar
     multiple_selection: Para seleccionar mais de uma entrada use a tecla <CTRL>
+    small_text: Texto Curto
+    show_title: Mostrar Título

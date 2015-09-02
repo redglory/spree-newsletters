@@ -1,54 +1,54 @@
 $.fn.newsletter_product_autocomplete = function (options) {
   'use strict';
+
   // Default options
   options = options || {};
   var multiple = typeof(options.multiple) !== 'undefined' ? options.multiple : true;
 
-  return this.each(function() {
-    $(this).autocomplete({
-      source: function(request, response) {
-        $.get(Spree.routes.product_search + '?' + jQuery.param({ q: $('#add_product_value').val(), authenticity_token: encodeURIComponent($('meta[name=csrf-token]').attr("content"))}), function(data) {
-          result = prep_product_autocomplete_data(data)
-          response(result);
-        });
+  this.select2({
+    width: '200px',
+    minimumInputLength: 3,
+    multiple: multiple,
+    initSelection: function (element, callback) {
+      $.get(Spree.routes.product_search, {
+        ids: element.val().split(','),
+        token: Spree.api_key
+      }, function (data) {
+        callback(multiple ? data.products : data.products[0]);
+      });
+    },
+    ajax: {
+      url: Spree.routes.product_search,
+      datatype: 'json',
+      data: function (term, page) {
+        return {
+          q: {
+            name_cont: term,
+            sku_cont: term
+          },
+          m: 'OR',
+          token: Spree.api_key
+        };
       },
-      minLength: 4,
-      focus: function(event, ui) {
-        $('#add_product_value').val(ui.item.label);
-        return false;
-      },
-      select: function(event, ui) {
-        $('#add_product_value').val(ui.item.label);
-        product = ui.item.data;
-        if (product['variant'] == undefined) {
-          // product
-          $('#add_variant_id').val(product['product']['master']['id']);
-          $('#add_product_id').val(product['product']['id']);
-        } else {
-          // variant
-          $('#add_variant_id').val(product['variant']['id']);
-          $('#add_product_id').val(product['id']);
-        }
-        return false;
+      results: function (data, page) {
+        var products = data.products ? data.products : [];
+        return {
+          results: products
+        };
       }
-    }).data("ui-autocomplete")._renderItem = function(ul, item) {
-        $(ul).addClass('ac_results');
-        html = format_product_autocomplete(item);
-        return $("<li></li>")
-            .data("ui-autocomplete-item", item)
-            .append("<a>" + html + "</a>")
-            .appendTo(ul);
-    }
-    $(this).data("ui-autocomplete")._resizeMenu = function() {
-        var ul = this.menu.element;
-        ul.outerWidth(this.element.outerWidth());
+    },
+    formatResult: function (product) {
+      return product.name;
+    },
+    formatSelection: function (product) {
+      return product.name;
     }
   });
 };
 
 var uploadify_script_data = {};
 
-function get_uploadify_script_data(){
+function get_uploadify_script_data() {
 	var ad = uploadify_script_data;
 	ad['[image][name]'] = $("#image_name").val();
 	ad['[image][href]'] = $("#image_href").val();
@@ -66,7 +66,7 @@ $(document).ready(function(){
   uploadify_script_data[app_key] = encodeURIComponent(app_cookie);
   
   //$("#add_product_value").newsletter_product_autocomplete();
-  $("#add_product_value").productAutocomplete();
+  $("#add_product_value").newsletter_product_autocomplete({multiple: false});
   
   $("#trash").droppable({
     accept: "#module_list > li",
@@ -75,6 +75,7 @@ $(document).ready(function(){
       if (!confirm('Are you sure you would like to remove this module?')) return false;
       ui.draggable.remove();
       var moduleData = {
+          'newsletter_id': newsletter_id,
           'module': {
             'newsletter_id': newsletter_id,
             'module_id': ui.draggable.attr("id").split("_").pop()
@@ -108,7 +109,7 @@ $(document).ready(function(){
     }
   });
 
-  $("#add_image").on("click", function(e){
+  $("#add_image").on("click", function(e) {
 	  uploadify_script_data['[image][name]'] = $("#image_name").val();
 	  uploadify_script_data['[image][href]'] = $("#image_href").val();
     $('#select_image').uploadify('settings','formData', uploadify_script_data);
@@ -117,10 +118,16 @@ $(document).ready(function(){
     e.preventDefault();
   });
   
-  $("#add_copy").on("click", function(e){
-    
+  $("#add_copy").on("click", function(e) {
+    var copyData = {
+        'newsletter_id': newsletter_id,
+        'newsletter_copy': {
+          'newsletter_id': newsletter_id
+        }
+    };
     $.ajax({
       url: '/admin/newsletters/'+newsletter_id+'/new_copy',
+      data: copyData,
       success: function(data, textStatus, jqXHR){
         openFormDialog(data);
       },
@@ -130,17 +137,16 @@ $(document).ready(function(){
         xhr.setRequestHeader('accept', '*/*;q=0.5, ' + settings.accepts.script);
       }
     });
-    
     e.preventDefault();
     
   });
   
-  $("#add_ruler").on("click", function(e){
+  $("#add_ruler").on("click", function(e) {
     add_module('hr');
     e.preventDefault();
   });
   
-  $("#add_header").on("click", function(e){
+  $("#add_header").on("click", function(e) {
     add_module('h2', $("#add_header_value").val());
     e.preventDefault();
   });
@@ -160,22 +166,19 @@ $(document).ready(function(){
   
 });
 
-function add_module(name, value, id)
-{
+function add_module(name, value, id) {
   var moduleData = {
+      'newsletter_id': newsletter_id,
       'module': {
         'newsletter_id': newsletter_id,
         'module_name': name
       }
   };
-  //posts = 'module[newsletter_id]='+newsletter_id+'&module[module_name]='+name;
   if(value != undefined) {
-    moduleData['module']['module_value'] = encodeURI(value);
-    //posts = posts+'&module[module_value]='+encodeURI(value);
+    moduleData['module']['module_value'] = value;
   }
   if(id != undefined) {
     moduleData['module']['module_id'] = id;
-    //posts = posts+'&module[module_id]='+id;
   }
   jQuery.post( '/admin/newsletters/add_module', moduleData, function(data, status, xhr){
     preview_newsletter();
@@ -184,16 +187,15 @@ function add_module(name, value, id)
   });
 }
 
-function preview_newsletter()
-{
+function preview_newsletter() {
   document.getElementById('newsletter-preview').contentDocument.location.reload(true);
 }
 
-function init_module_list()
-{
+function init_module_list() {
   $('#module_list').sortable({
     update: function(){
       var moduleSort = {
+          'newsletter_id': newsletter_id,
           'module': {
             'newsletter_id': newsletter_id,
             'sort': $('#module_list').sortable('serialize')
@@ -224,8 +226,8 @@ function init_module_list()
 function openFormDialog(data){
   
   $('#remote-dialog').html(data);
-  $('#remote-dialog').dialog("option", "title", $('#remote-dialog h1').html());
-  $('#remote-dialog h1').remove();
+  $('#remote-dialog').dialog("option", "title", $('#remote-dialog legend').html());
+  $('#remote-dialog legend').remove();
 
   $('#remote-dialog form[data-remote="true"]').bind('ajax:complete', function(evt, xhr, status){
     $('#remote-dialog').dialog("close");
