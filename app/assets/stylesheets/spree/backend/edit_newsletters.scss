@@ -1,6 +1,6 @@
-.module_order_out {
-  padding-left: 20px;
-}
+//.module_order_out {
+//  padding-left: 20px;
+//}
 //iframe {
 //  float: left;
 //}
@@ -133,7 +133,7 @@ $hover-color: red;
   position: relative;
   width: 200px*$scale;
   height: 200px*$scale;
-  margin: 50px auto 0;
+  margin: 30px auto 0;
   border-radius: 5px*$scale;
   transition: box-shadow .2s ease;
   &:hover {
